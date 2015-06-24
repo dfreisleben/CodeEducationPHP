@@ -1,3 +1,20 @@
+
+<?php
+//$path = str_replace("/","", $rota['path']);
+
+function rotas()
+{
+    $rota = ltrim(parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI'), PHP_URL_PATH), "/");
+
+    if($rota == "")
+    {
+        $rota = "index";
+    }
+    return $rota;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,13 +50,21 @@
 
 <?php
 
-if (isset($_GET["arquivo"]) and file_exists($_GET["arquivo"])){
-    require_once($_GET["arquivo"]);
+//  echo "<h1>Code Education</h1>";
+//echo "<p>Esse é um site de estudo das aulas que estou realizando na Code Education.</p>";
+
+$rotas = array('index','empresa','produtos','servicos','contato');
+
+if (!in_array(rotas(), $rotas) or !file_exists(rotas().".php"))
+{
+    http_response_code(404);
+    echo " ERRO 404 ";
 }
-else{
-    echo "<h1>Code Education</h1>";
-    echo "<p>Esse é um site de estudo das aulas que estou realizando na Code Education.</p>";
+else
+{
+    require_once(rotas().".php");
 }
+
  ?>
 </div>
 
